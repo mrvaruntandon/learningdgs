@@ -15,6 +15,10 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// This application is on Spring Boot 2.7,
+	// you will need to use the 5.5.x release train of the DGS framework.
+	implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:5.5.1"))
+	implementation "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter"
 }
 
 tasks.named('test') {
