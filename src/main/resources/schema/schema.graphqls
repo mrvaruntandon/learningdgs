@@ -1,12 +1,12 @@
 type Query {
-    shows(titleFilter: String): [Show]
+    shows(idsFilter: [ID!]!): [Show]
 }
 
 type Show {
     id : ID!
     title: String
     releaseYear: Int
-    actors : [Actor]
+    leadActor : Actor
 
 }
 
