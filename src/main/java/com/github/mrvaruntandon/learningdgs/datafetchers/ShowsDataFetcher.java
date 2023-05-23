@@ -29,19 +29,27 @@ public class ShowsDataFetcher {
         );
         List<Show> response = new ArrayList<>();
         for(com.github.mrvaruntandon.learningdgs.entity.Show show : shows){
+            Actor actor = Actor.newBuilder().id(String.valueOf(show.getLeadActorId())).build();
             response.add(
                     Show.newBuilder()
                     .id(show.getShowId().toString())
                     .title(show.getTitle())
                     .releaseYear(show.getReleaseYear())
+                    .leadActor(actor)
                     .build()
             );
         }
         return response;
     }
 
+    //Child Data Fetcher
     @DgsData(parentType = "Show", field = "leadActor")
     public Actor leadActor(DgsDataFetchingEnvironment dfe) {
-        return null;
+        Show show = dfe.getSource();
+        com.github.mrvaruntandon.learningdgs.entity.Actor actor = actorRepository.getReferenceById(
+                Integer.valueOf(show.getLeadActor().getId())
+        );
+        show.getLeadActor().setName(actor.getName());
+        return show.getLeadActor();
     }
 }
