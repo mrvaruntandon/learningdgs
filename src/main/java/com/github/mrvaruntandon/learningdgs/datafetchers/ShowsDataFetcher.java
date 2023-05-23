@@ -1,14 +1,17 @@
 package com.github.mrvaruntandon.learningdgs.datafetchers;
 
+import com.github.mrvaruntandon.learningdgs.dataloaders.ActorDataLoader;
 import com.github.mrvaruntandon.learningdgs.generated.types.Actor;
 import com.github.mrvaruntandon.learningdgs.generated.types.Show;
 import com.github.mrvaruntandon.learningdgs.repository.ActorRepository;
 import com.github.mrvaruntandon.learningdgs.repository.ShowRepository;
 import com.netflix.graphql.dgs.*;
+import org.dataloader.DataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @DgsComponent
@@ -16,9 +19,6 @@ public class ShowsDataFetcher {
 
     @Autowired
     private ShowRepository showRepository;
-
-    @Autowired
-    private ActorRepository actorRepository;
 
     @DgsQuery
     public List<Show> shows(@InputArgument List<String> idsFilter) {
@@ -44,12 +44,9 @@ public class ShowsDataFetcher {
 
     //Child Data Fetcher
     @DgsData(parentType = "Show", field = "leadActor")
-    public Actor leadActor(DgsDataFetchingEnvironment dfe) {
+    public CompletableFuture<Actor> leadActor(DgsDataFetchingEnvironment dfe) {
         Show show = dfe.getSource();
-        com.github.mrvaruntandon.learningdgs.entity.Actor actor = actorRepository.getReferenceById(
-                Integer.valueOf(show.getLeadActor().getId())
-        );
-        show.getLeadActor().setName(actor.getName());
-        return show.getLeadActor();
+        DataLoader<String, Actor> dataLoader = dfe.getDataLoader("actors");
+        return dataLoader.load(show.getLeadActor().getId());
     }
 }
