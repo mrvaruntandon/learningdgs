@@ -1,9 +1,7 @@
 package com.github.mrvaruntandon.learningdgs.datafetchers;
 
-import com.github.mrvaruntandon.learningdgs.dataloaders.ActorDataLoader;
 import com.github.mrvaruntandon.learningdgs.generated.types.Actor;
 import com.github.mrvaruntandon.learningdgs.generated.types.Show;
-import com.github.mrvaruntandon.learningdgs.repository.ActorRepository;
 import com.github.mrvaruntandon.learningdgs.repository.ShowRepository;
 import com.netflix.graphql.dgs.*;
 import org.dataloader.DataLoader;
